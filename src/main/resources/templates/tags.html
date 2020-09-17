@@ -113,11 +113,11 @@
             <div class="five wide column ">
                 <div class="ui two column grid middle aligned ">
                     <div class="column">
-                        <a class="ui mini button teal basic" th:href="@{/(page=${page.num}-1)}" id="lastPage"
+                        <a class="ui mini button teal basic" th:href="@{'/tags/'+${activeTagId}(page=${page.num}-1)}" id="lastPage"
                            th:unless="${page.isFirst()}">上一页</a>
                     </div>
                     <div class="right aligned column ">
-                        <a class="ui mini button teal basic" th:href="@{/(page=${page.num}-1)}" id="nextPage"
+                        <a class="ui mini button teal basic" th:href="@{'/tags/'+${activeTagId}(page=${page.num}+1)}" id="nextPage"
                            th:unless="${page.isLast()}">下一页</a>
                     </div>
                 </div>
