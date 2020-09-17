@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.BlogMapper">
+    <select id="getBlogs" resultMap="BlogsMap">
+    select *
+    from t_blog
+</select>
+    <resultMap id="BlogsMap" type="TBlog">
+        <id column="bid" property="bid"/>
+        <association property="tUser" column="writer" javaType="TUser" select="getWriter" fetchType="lazy"/>
+        <association property="tType" column="typeid" javaType="TType" select="getType" fetchType="lazy"/>
+        <collection property="comments" javaType="List" ofType="TComment" select="getComments" column="bid"
+                    fetchType="lazy"/>
+        <collection property="tTags" javaType="List" ofType="TTags" select="getTags" column="bid" fetchType="lazy"/>
+    </resultMap>
+    <select id="getType" resultType="TType">
+        select * from t_type where tid=#{typeid}
+    </select>
+    <select id="getWriter" resultType="TUser">
+        select * from t_user where uid=#{writer}
+    </select>
+    <select id="getComments" resultType="TComment">
+        select * from t_comment where targetid=#{bid}
+    </select>
+    <select id="getTags" resultMap="TagsAndBlog">
+        select t.tid as tid,t.tname as tname from  t_relation  r
+        join t_tags  t
+        on r.bid=#{bid} and r.tid=t.tid
+    </select>
+    <select id="listBlog" resultMap="BlogsMap">
+        select * from t_blog
+        <where>
+            <if test="blog.title != null and blog.title !=''">
+                title like "%"#{blog.title}"%"
+            </if>
+            <if test="blog.typeid !=null">
+                and typeid=#{blog.typeid}
+            </if>
+            <if test="blog.recommend !=null">
+                and recommend=#{blog.recommend}
+            </if>
+        </where>
+        order by ${column} ${method} limit ${(currentPage-1)*pageSize},${pageSize}
+    </select>
+    <select id="listQueryBlog" resultMap="BlogsMap">
+        select * from t_blog where content like #{query} or title like #{query} or description like #{query}
+    </select>
+    <select id="listRecommendBlogTop" resultMap="BlogsMap">
+        select * from t_blog where recommend=1  order by createtime desc  limit 0,#{size}
+    </select>
+    <select id="getSomeBlogs" resultMap="BlogsMap">
+        select * from t_blog
+        <where>
+            <if test="blog.title != null and blog.title !=''">
+                title like "%"#{blog.title}"%"
+            </if>
+            <if test="blog.typeid !=null">
+                and typeid=#{blog.typeid}
+            </if>
+            <if test="blog.recommend !=null">
+                and recommend=#{blog.recommend}
+            </if>
+        </where>
+    </select>
+    <select id="listByTagId" resultMap="BlogsMap">
+          select b.bid as bid,b.typeid as typeid,b.writer as writer,b.title as title,b.content as content,b.image as image,b.times as times,b.pay as pay,b.copyright as copyright,b.publish as publish,b.createtime as createtime,b.updatetime as updatetime,b.recommend as recommend,b.commentable as commentable,b.flag as flag,b.description as description
+        from t_blog b
+        join t_relation r
+        on r.bid=b.bid
+        where r.tid=#{tagId}
+        order by ${column} ${method} limit ${(currentPage-1)*pageSize},${pageSize}
+    </select>
+    <select id="findByYear" resultType="TBlog">
+        select * from t_blog b  where date_format(b.updatetime,'%Y') = #{year}
+    </select>
+    <select id="listByTagIdAll" resultMap="BlogsMap">
+         select b.bid as bid,b.typeid as typeid,b.writer as writer,b.title as title,b.content as content,b.image as image,b.times as times,b.pay as pay,b.copyright as copyright,b.publish as publish,b.createtime as createtime,b.updatetime as updatetime,b.recommend as recommend,b.commentable as commentable,b.flag as flag,b.description as description
+        from t_blog b
+        join t_relation r
+        on r.bid=b.bid
+        where r.tid=#{tagId}
+    </select>
+    <select id="countBlogs" resultType="long">
+        select count(1) from t_blog ;
+    </select>
+    <select id="getBlog" resultMap="BlogsMap">
+        select * from t_blog where bid=#{bid}
+    </select>
+    <select id="pageListBlog" resultMap="BlogsMap">
+        select * from t_blog  order by ${column} ${method} limit ${(currentPage-1)*pageSize},${pageSize}
+    </select>
+    <select id="findGroupYear" resultType="string">
+        select date_format(b.updatetime, '%Y') as year from  t_blog b group by year order by year desc
+    </select>
+    <insert id="saveBlogInsert" parameterType="TBlog" useGeneratedKeys="true" keyProperty="bid">
+         replace into t_blog
+         (
+         <if test="bid !=null">
+             bid,
+         </if>
+         typeid,writer,title,content,image,times,pay,copyright,publish,createtime,updatetime,recommend,commentable,flag,description)
+         values
+         (
+         <if test="bid !=null">
+             #{bid},
+         </if>
+         #{typeid},#{writer},#{title},#{content},#{image},#{times},#{pay},#{copyright},#{publish},#{createtime},#{updatetime},#{recommend},#{commentable},#{flag},#{description})
+    </insert>
+    <insert id="saveBlogReplace" parameterType="TBlog" >
+        replace into t_blog
+        (
+        <if test="bid !=null">
+            bid,
+        </if>
+        typeid,writer,title,content,image,times,pay,copyright,publish,createtime,updatetime,recommend,commentable,flag,description)
+        values
+        (
+        <if test="bid !=null">
+            #{bid},
+        </if>
+        #{typeid},#{writer},#{title},#{content},#{image},#{times},#{pay},#{copyright},#{publish},#{createtime},#{updatetime},#{recommend},#{commentable},#{flag},#{description})
+    </insert>
+    <delete id="deleteBlog">
+        delete from t_blog where bid=#{bid}
+    </delete>
+    <update id="updateTimes">
+        update t_blog  set times=times + 1 where bid=#{bid}
+    </update>
+    <resultMap id="TagsAndBlog" type="TTags">
+        <id column="tid" property="tid"/>
+        <result column="tname" property="tname"/>
+    </resultMap>
+</mapper>

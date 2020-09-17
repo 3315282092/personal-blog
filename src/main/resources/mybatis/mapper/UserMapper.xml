@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.UserMapper">
+    <select id="findByUsernameAndPassword" resultMap="getUser">
+        select  * from t_user
+        where username=#{username} and password=#{password}
+    </select>
+    <resultMap id="getUser" type="TUser">
+        <id column="uid" property="uid"/>
+        <collection property="blogs" javaType="List" column="uid" select="getBlogsByWriter" fetchType="lazy"/>
+    </resultMap>
+    <select id="getBlogsByWriter" resultType="TBlog">
+        select * from t_blog where writer=#{uid}
+    </select>
+    <select id="getUserList" resultMap="getUser">
+        select  * from t_user
+    </select>
+    <select id="findByUsername" resultMap="getUser">
+        select * from t_user where username=#{username}
+    </select>
+</mapper>

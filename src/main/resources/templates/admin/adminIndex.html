@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin/_fragment :: head(~{::title})}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客管理</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+
+<body>
+<!-- 导航 -->
+<nav class="ui inverted segment attached m-padding-tb-mini m-shadow-small" th:replace="~{admin/_fragment:: navbar(0)}">
+    <div class="ui container">
+        <div class="ui inverted secondary menu stackable">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="#" class="a-item item m-mobile-hide active"><i class="mini home icon"></i>&nbsp;博客</a>
+            <a href="#" class="a-item item m-mobile-hide "><i class="mini idea icon"></i>&nbsp; 分类</a>
+            <a href="#" class="a-item item m-mobile-hide"><i class="mini tags icon"></i>&nbsp; 标签</a>
+            <div class="right menu m-mobile-hide">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img src="https://picsum.photos/seed/picsum/100/100" alt="" class="ui avatar image"> Zongyuheng
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui black icon button m-top-right m-mobile-show menu toggle">
+        <i class="sidebar  icon"></i>
+    </a>
+</nav>
+
+<!-- 内容主体部分 -->
+<div class="m-padding-tb-big m-container-small m-padding-tb-massive">
+    <div class="ui container m-margin-tb-tiny">
+        <div class="ui success large message">
+            <h2>Hi</h2>
+            <p>宗宇恒，欢迎登录</p>
+        </div>
+        <div style="background: whitesmoke!important;">
+        <img data-original="https://picsum.photos/seed/picsum/1000/700" alt="" class="ui rounded bordered fluid image" width="640" height="480">
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- 底部内容栏footer部分 -->
+<footer class="ui inverted vertical segment m-padding-tb-massive" th:replace="~{admin/_fragment :: footerBar}">
+
+    <!-- 这块的container指的是整块的footer的区域 container的外层区域是圈出这块区域，想要布局就需要用到container-->
+</footer>
+<th:block th:replace="~{admin/_fragment :: script}">
+
+</th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.a-item').toggleClass('m-mobile-hide');
+    });
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    })
+    $(function () {
+$("img").lazyload();
+    })
+</script>
+</body>
+
+</html>

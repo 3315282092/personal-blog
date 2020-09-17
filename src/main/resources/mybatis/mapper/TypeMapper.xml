@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.TypeMapper">
+    <select id="getAllTypes" resultMap="getType">
+        select * from t_type
+    </select>
+    <select id="selectBlogsByTypes" resultType="TBlog">
+        select * from t_blog where typeid=#{tid}
+    </select>
+    <select id="findTypesByPageDesc" resultMap="getType">
+        select * from t_type order by ${column} ${method} limit ${(currentPage-1)*pageSize},${pageSize}
+    </select>
+    <select id="getTypeByName" resultMap="getType">
+        select * from t_type where tname=#{name}
+    </select>
+    <select id="getTypeById" resultMap="getType">
+        select * from t_type where tid=#{id}
+    </select>
+    <update id="updateType">
+        update t_type set tname=#{newName} where tid=#{id}
+    </update>
+    <insert id="saveType" parameterType="TType">
+        insert into t_type (tname) values (#{tname})
+    </insert>
+    <delete id="deleteType">
+        delete from t_type where tid=#{id}
+    </delete>
+    <resultMap id="getType" type="TType">
+        <id column="tid" property="tid"/>
+        <collection property="tBlogs" javaType="List" column="tid" select="selectBlogsByTypes" fetchType="lazy"/>
+    </resultMap>
+</mapper>

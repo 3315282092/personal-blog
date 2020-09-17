@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.CommentMapper">
+    <insert id="saveComment" keyProperty="cid" useGeneratedKeys="true" parameterType="TComment">
+        insert into t_comment (nickname,headicon,commentcontent,createtime,targetid,parentcommentid,email,admincontext)
+        values (#{comment.nickname},#{comment.headicon},#{comment.commentcontent},#{comment.createtime},#{comment.tBlog.bid},#{comment.parent.cid},#{comment.email},#{comment.admincontext})
+    </insert>
+    <select id="findByCommentId" resultMap="getComment">
+     select * from t_comment where cid=#{cid}
+    </select>
+    <select id="findByBlogIdAndParentCommentNot" resultMap="getComment">
+        select * from t_comment where targetid=#{blogId} and parentcommentid is null order by ${column} ${method}
+    </select>
+    <select id="findByParentId" resultMap="getComments">
+        select * from t_comment where parentcommentid=#{cid}
+    </select>
+    <select id="findByCommentIdSecondary" resultType="TComment">
+          select * from t_comment where cid=#{parentcommentid}
+    </select>
+    <select id="findTargetBlog" resultType="TBlog">
+        select * from t_blog where bid=#{parentcommentid}
+</select>
+    <select id="findByBlogId" resultMap="getComment">
+        select * from t_comment where targetid=#{blogId}
+    </select>
+    <insert id="saveByCommentList">
+        insert into t_comment
+        (nickname,headicon,commentcontent,createtime,targetid,parentcommentid,email,admincontext)
+        values
+        <foreach collection="commentList" item="comment" separator=",">
+            (#{comment.nickname},#{comment.headicon},#{comment.commentcontent},#{comment.createtime},#{comment.tBlog.bid},#{comment.parent.cid},#{comment.email},#{comment.admincontext})        </foreach>
+    </insert>
+    <delete id="deleteByBlogId">
+        delete from t_comment where targetid=#{blogId}
+    </delete>
+    <update id="updateTarget">
+        update t_comment set targetid=#{targetid} where targetid=#{oldTargetId}
+    </update>
+    <resultMap id="getComment" type="TComment">
+        <id column="cid" property="cid"/>
+        <association property="tBlog" column="targetid" select="findTargetBlog"></association>
+        <association property="parent" column="parentcommentid" select="findByCommentIdSecondary"
+                     fetchType="lazy"></association>
+        <collection property="comments" column="cid" select="findByParentId" fetchType="lazy"></collection>
+    </resultMap>
+    <resultMap id="getComments" type="TComment">
+        <id property="cid" column="cid"/>
+        <association property="parent" column="parentcommentid" select="findByCommentIdSecondary"
+                     fetchType="lazy"></association>
+        <collection property="comments" column="cid" select="findByParentId" fetchType="lazy"></collection>
+    </resultMap>
+    <resultMap id="getCommentSecondary" type="TComment">
+        <id column="cid" property="cid"/>
+        <result column="nickname" property="nickname"/>
+    </resultMap>
+</mapper>

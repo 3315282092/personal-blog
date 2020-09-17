@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.RelationMapper">
+
+    <insert id="saveRelation">
+        insert  into t_relation (bid,tid)
+        values
+        <foreach collection="tids" item="tid" separator=",">
+        (
+            #{bid},#{tid}
+            )
+        </foreach>
+
+    </insert>
+    <delete id="deleteRelation">
+        delete from t_relation where bid=#{bid}
+    </delete>
+</mapper>

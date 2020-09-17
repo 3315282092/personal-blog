@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: dev
+  mvc:
+    servlet:
+      load-on-startup: 1
+mybatis:
+  type-aliases-package: com.zongyuheng.pojo
+  mapper-locations:
+       classpath:mybatis/mapper/*.xml
+server:
+  servlet:
+    session:
+      timeout: 7200
+tComment.headicon: /img/head.png

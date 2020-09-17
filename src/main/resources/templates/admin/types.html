@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin/_fragment :: head(~{::title})}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类管理</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+
+<body>
+<!-- 导航 -->
+<nav class="ui inverted segment attached m-padding-tb-mini m-shadow-small"
+     th:replace="~{admin/_fragment:: navbar(2)}">
+    <div class="ui container">
+        <div class="ui inverted secondary menu stackable">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="#" class="a-item item m-mobile-hide active"><i class="mini home icon"></i>&nbsp;博客</a>
+            <a href="#" class="a-item item m-mobile-hide "><i class="mini idea icon"></i>分类</a>
+            <a href="#" class="a-item item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+            <div class="right menu m-mobile-hide">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img src="https://picsum.photos/seed/picsum/100/100" alt="" class="ui avatar image">
+                        Zongyuheng
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui black icon button m-top-right m-mobile-show menu toggle">
+        <i class="sidebar  icon"></i>
+    </a>
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a th:href="@{/admin/types/input}" class="item">新增</a>
+            <a th:href="@{/admin/types/}" class="teal active item">列表</a>
+        </div>
+    </div>
+</div>
+<!-- 内容主体部分 -->
+<input type="hidden" id="currentPage" th:value="${page.getNum()}">
+<input type="hidden" id="numberOfElements" th:value="${page.getNumberOfElements()}">
+
+<div class="m-padding-tb-supermassive m-container-small ">
+    <div class="container">
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示:</div>
+            <br>
+            <br>
+            <div th:text="${message}">恭喜：操作成功</div>
+        </div>
+        <table class="ui teal compact table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+            <tr th:each="type,iterStat : ${page.getResults()}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${type.tname}"></td>
+                <td>
+                    <a th:href="@{/admin/types/{id}/input(id=${type.tid})}" class="ui mini teal button basic">编辑</a>
+                    <a th:href="@{/admin/types/{id}/delete(id=${type.tid})}" class="ui mini red button basic">删除</a>
+                </td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                    <div class="ui mini pagination menu" id="parent">
+                        <a class="item" id="lastPage" th:unless="${page.isFirst()}">上一页</a>
+                        <a class="item" id="nextPage" th:unless="${page.isLast()}">下一页</a>
+                    </div>
+                    <a href="#" th:href="@{/admin/types/input}" class="ui teal right floated button mini basic">新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<!-- 底部内容栏footer部分 -->
+<footer class="ui inverted vertical footer  segment m-padding-tb-massive "
+        th:replace="~{admin/_fragment :: footerBar}"
+        style="margin-top: 100px !important;position: relative!important;">
+    <div class="ui center aligned  container">
+        <div class="ui divided stackable inverted grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/img/myWeChat.png" class="ui rounded image" alt=""
+                             style="width: 110px;">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header">最新博客</h4>
+                <!-- 上面是这个列表的标题 -->
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事（User Story）</a>
+                    <a href="" class="item">用户故事（User Story）</a>
+                    <a href="" class="item">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header">联系我</h4>
+                <!-- 上面是这个列表的标题 -->
+                <div class="ui inverted link list">
+                    <a href="" class="item">Email:3315282092@qq.com</a>
+                    <a href="" class="item">QQ:3315282092</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    这是我的个人博客，会分享关于编程，写作，记录心路旅程的任何内容，希望可以给来到这儿的人有所帮助</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright©2020-2023 Zongyuheng Designed by
+            Zongyuheng</p>
+        <!-- 这块的container指的是整块的footer的区域 container的外层区域是圈出这块区域，想要布局就需要用到container-->
+    </div>
+</footer>
+
+<th:block th:replace="~{admin/_fragment :: script}">
+
+</th:block>
+<script th:inline="javascript">
+    $('.menu.toggle').click(function () {
+        $('.a-item').toggleClass('m-mobile-hide');
+    });
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    })
+    //上一页
+    $(function () {
+        $('#lastPage').click(function () {
+            $.get({
+                url: "/ajax/admin/types",
+                data: {
+                    'page': parseInt($("input:hidden[id='currentPage']").val()) - 1
+                },
+                success: function (data) {
+                    $('#content').empty()
+                    let jsonObj = $.parseJSON(data);
+                    console.log(jsonObj);
+                    $("input:hidden[id='currentPage']").val(jsonObj.num)
+                    let html = "";
+                    for (let i = 0; i < jsonObj.numberofElements; i++) {
+                        let countIndex = i + 1;
+                        html += '<tr>' +
+                            "<td>" + countIndex + "</td>" +
+                            "<td>" + jsonObj.results[i].tname + "</td>"
+                        "<td>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/input\" class=\"ui mini teal button basic\">" + '编辑' + "</a>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/delete\" class=\"ui mini red button basic\">" + '删除' + "</a>" +
+                        "</td>"
+                        + '</tr>';
+                    }
+                    $('#content').html(html)
+                    $('#parent').empty();
+                    if (jsonObj.first) {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'nextPage'
+                        htmlAnchorElement.innerText = '下一页'
+                        htmlAnchorElement.onclick = function () {
+                            nextPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    } else if (jsonObj.last) {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'lastPage'
+                        htmlAnchorElement.innerText = '上一页'
+                        htmlAnchorElement.onclick = function () {
+                            lastPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    } else {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'lastPage'
+                        htmlAnchorElement.innerText = '上一页'
+                        htmlAnchorElement.onclick = function () {
+                            lastPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'nextPage'
+                        htmlAnchorElement.innerText = '下一页'
+                        htmlAnchorElement.onclick = function () {
+                            nextPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    }
+
+                }
+            })
+        })
+    })
+    //下一页
+    $(function () {
+        $('#nextPage').click(function () {
+            $.get({
+                url: "/ajax/admin/types",
+                data: {
+                    'page': parseInt($("input:hidden[id='currentPage']").val()) + 1
+                },
+                success: function (data) {
+                    $('#content').empty()
+                    var jsonObj = $.parseJSON(data);
+                    console.log(jsonObj.num);
+                    $("input:hidden[id='currentPage']").val(jsonObj.num)
+                    let html = "";
+                    for (let i = 0; i < jsonObj.numberOfElements; i++) {
+                        let countIndex = i + 1;
+                        html += '<tr>' +
+                            "<td>" + countIndex + "</td>" +
+                            "<td>" + jsonObj.results[i].tname + "</td>" +
+                            "<td>" +
+                            "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/input\" class=\"ui mini teal button basic\">" + '编辑' + "</a>" +
+                            "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/delete\" class=\"ui mini red button basic\">" + '删除' + "</a>" +
+                            "</td>"
+                            + '</tr>';
+
+                    }
+                    console.log(html);
+                    $('#content').html(html)
+                    $('#parent').empty();
+                    if (jsonObj.first) {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'nextPage'
+                        htmlAnchorElement.innerText = '下一页'
+                        htmlAnchorElement.onclick = function () {
+                            nextPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    } else if (jsonObj.last) {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = ' lastPage'
+                        htmlAnchorElement.innerText = '上一页'
+                        htmlAnchorElement.onclick = function () {
+                            lastPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    } else {
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'lastPage'
+                        htmlAnchorElement.innerText = '上一页'
+                        htmlAnchorElement.onclick = function () {
+                            lastPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                        var htmlAnchorElement = document.createElement('a');
+                        htmlAnchorElement.className = 'item'
+                        htmlAnchorElement.id = 'nextPage'
+                        htmlAnchorElement.innerText = '下一页'
+
+                        htmlAnchorElement.onclick = function () {
+                            nextPage()
+                        }
+                        $('#parent').append(htmlAnchorElement)
+                    }
+
+                }
+            })
+        })
+    })
+
+    function nextPage() {
+        console.log('asdsad');
+        $.get({
+            url: "/ajax/admin/types",
+            data: {
+                'page': parseInt($("input:hidden[id='currentPage']").val()) + 1
+            },
+            success: function (data) {
+                $('#content').empty()
+                var jsonObj = $.parseJSON(data);
+                $("input:hidden[id='currentPage']").val(jsonObj.num)
+                let html = "";
+                for (let i = 0; i < jsonObj.numberOfElements; i++) {
+                    let countIndex = i + 1;
+                    html += '<tr>' +
+                        "<td>" + countIndex + "</td>" +
+                        "<td>" + jsonObj.results[i].tname + "</td>" +
+                        "<td>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/input\" class=\"ui mini teal button basic\">" + '编辑' + "</a>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/delete\" class=\"ui mini red button basic\">" + '删除' + "</a>" +
+                        "</td>"
+                        + '</tr>';
+
+                }
+                $('#content').html(html)
+                $('#parent').empty();
+                if (jsonObj.first) {
+                    console.log("第一个")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'nextPage'
+                    htmlAnchorElement.innerText = '下一页'
+                    htmlAnchorElement.onclick = function () {
+                        nextPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                } else if (jsonObj.last) {
+                    console.log("最后一个")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = ' lastPage'
+                    htmlAnchorElement.innerText = '上一页'
+                    htmlAnchorElement.onclick = function () {
+                        lastPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                } else {
+                    console.log("都不是")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'lastPage'
+                    htmlAnchorElement.innerText = '上一页'
+                    htmlAnchorElement.onclick = function () {
+                        lastPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'nextPage'
+                    htmlAnchorElement.innerText = '下一页'
+                    htmlAnchorElement.onclick = function () {
+                        nextPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                }
+
+            }
+        })
+    }
+
+    function lastPage() {
+        $.get({
+            url: "/ajax/admin/types",
+            data: {
+                'page': parseInt($("input:hidden[id='currentPage']").val()) - 1
+            },
+            success: function (data) {
+                $('#content').empty()
+                let jsonObj = $.parseJSON(data);
+                $("input:hidden[id='currentPage']").val(jsonObj.num)
+                let html = "";
+                for (let i = 0; i < jsonObj.numberOfElements; i++) {
+                    console.log("哈哈哈")
+                    let countIndex = i + 1;
+                    html += '<tr>' +
+                        "<td>" + countIndex + "</td>" +
+                        "<td>" + jsonObj.results[i].tname + "</td>" +
+                        "<td>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/input\" class=\"ui mini teal button basic\">" + '编辑' + "</a>" +
+                        "<a href=\"/admin/types/" + jsonObj.results[i].tid + "/delete\" class=\"ui mini red button basic\">" + '删除' + "</a>" +
+                        "</td>"
+                        + '</tr>';
+                }
+                $('#content').html(html)
+                $('#parent').empty();
+                if (jsonObj.first) {
+                    console.log("第一个")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'nextPage'
+                    htmlAnchorElement.innerText = '下一页'
+                    htmlAnchorElement.onclick = function () {
+                        nextPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                } else if (jsonObj.last) {
+                    console.log("最后一个")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'lastPage'
+                    htmlAnchorElement.onclick = function () {
+                        lastPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                } else {
+                    console.log("都不是")
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'lastPage'
+                    htmlAnchorElement.innerText = '上一页'
+                    htmlAnchorElement.onclick = function () {
+                        lastPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                    var htmlAnchorElement = document.createElement('a');
+                    htmlAnchorElement.className = 'item'
+                    htmlAnchorElement.id = 'nextPage'
+                    htmlAnchorElement.innerText = '下一页'
+                    htmlAnchorElement.onclick = function () {
+                        nextPage()
+                    }
+                    $('#parent').append(htmlAnchorElement)
+                }
+
+            }
+        })
+    }
+
+    $('.message .close').on('click', function () {
+        $(this).closest('.message').transition('fade')
+    })
+</script>
+
+</body>
+
+</html>

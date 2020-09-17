@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongyuheng.mapper.TagMapper">
+
+
+    <resultMap id="getTag" type="TTags">
+        <id column="tid" property="tid"/>
+        <collection property="blogs" javaType="List" column="tid" select="selectBlogsByTags"/>
+    </resultMap>
+
+    <select id="getSomeTags" resultMap="getTag">
+       select count(1) as count,t_tags.tid,t_tags.tname from t_relation right join t_tags on t_relation.tid=t_tags.tid group by t_relation.tid order by  count desc
+   </select>
+    <select id="getAllTags" resultMap="getTag">
+        select * from t_tags
+    </select>
+ <select id="getTagsByIds" resultMap="getTag">
+     select * from t_tags
+     <where>
+         <foreach collection="ids" item="id" open="and (" close=")" separator="or">
+             tid=#{id}
+         </foreach>
+     </where>
+ </select>
+    <select id="selectBlogsByTags" resultType="TBlog">
+          select b.bid as bid,b.typeid as typeid,b.writer as writer,b.title as title,b.content as content ,b.image as image,
+          b.times as times,b.pay as pay ,b.copyright as copyright ,b.publish as publish,b.createtime as createtime,
+          b.updatetime as updatetime
+          from  t_relation  r
+        join t_blog b
+        on  r.tid=#{tid} and r.bid=b.bid
+    </select>
+
+
+    <select id="findTagsByPageDesc" resultMap="getTag">
+        select * from t_tags order by ${column} ${method} limit ${(currentPage-1)*pageSize},${pageSize}
+    </select>
+
+    <select id="getTagByName" resultMap="getTag">
+        select * from t_tags where tname=#{name}
+    </select>
+
+    <select id="getTagById" resultMap="getTag">
+        select * from t_tags where tid=#{id}
+    </select>
+
+    <update id="updateTag">
+        update t_tags set tname=#{newName} where tid=#{id}
+    </update>
+
+    <insert id="saveTag" parameterType="TTags">
+        insert into t_tags (tname) values (#{tname})
+    </insert>
+
+    <delete id="deleteTag">
+        delete from t_tags where tid=#{id}
+    </delete>
+
+</mapper>
